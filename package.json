@@ -1,0 +1,30 @@
+{
+  "name": "Radzevich_hometask1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreiRadzevich/Radzevich_hometask1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreiRadzevich/Radzevich_hometask1/issues"
+  },
+  "homepage": "https://github.com/AndreiRadzevich/Radzevich_hometask1#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-airbnb-es5": "^1.2.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-react": "^7.12.4",
+    "jest": "^24.7.1"
+  }
+}
