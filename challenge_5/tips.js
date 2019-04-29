@@ -53,4 +53,16 @@ function calculateAverageTips(arrTips) {
   return (sumTips / arrTips.length);
 }
 
+function logHighestTips(average1, average2, name1, name2) {
+ 	if (average1 > average2) {
+ 		console.log(name1 + "'s" + " family paid highest tips");
+ 	}
+ 	console.log(name2 + "'s" + " family paid highest tips");
+ }
+
+var averageTipJohn = calculateAverageTips(John.tips);
+var averageTipMark = calculateAverageTips(Mark.tips);
+
+logHighestTips(averageTipJohn, averageTipMark, 'John', 'Mark');
+
 module.exports = calculateAverageTips;
