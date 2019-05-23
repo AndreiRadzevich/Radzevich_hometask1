@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Forms</title>
+	<style type="text/css">
+		label {
+			width: 200px;
+			float: left;
+		}
+
+		#name-dev {
+			width: 500px;
+		}
+
+		#name {
+			width: 500px;
+		}
+
+		#url {
+			width: 300px;
+		}
+
+		#date-start {
+			width: 70px;
+		}
+
+		#number-visit {
+			width: 200px;
+		}
+
+		#email {
+			width: 200px;
+		}
+
+		#date-start {
+			width: 200px;
+		}
+
+		select {
+			width: 200px;
+		}
+
+		textarea {
+			width: 300px;
+			height: 100px;
+		}
+
+		div {
+			height: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<form action="http://fe.it-academy.by/TestForm.php" method="get" name="ourForm">
+	</form>
+	<script>
+		var arrForm = [{
+				label: 'Разработчики:',
+				type: 'text',
+				id: 'name-dev'
+			},
+			{
+				label: 'Название сайта:',
+				type: 'text',
+				id: 'name'
+			},
+			{
+				label: 'URL сайта:',
+				type: 'url',
+				id: 'url'
+			},
+			{
+				label: 'Дата запуска сайта:',
+				type: 'date',
+				id: 'date-start'
+			},
+			{
+				label: 'Посетителей в сутки:',
+				type: 'text',
+				id: 'number-visit'
+			},
+			{
+				label: 'E-mail для связи:',
+				type: 'email',
+				id: 'email'
+			},
+			{
+				label: 'Рубрика каталога:',
+				type: 'select',
+				id: 'rubric',
+				optionValue: ['здоровье', 'домашний уют', 'бытовая техника']
+			},
+			{
+				label: 'Размещение:',
+				type: 'radio',
+				id: 'location',
+				radioValue: ['платное', 'бесплатное', 'VIP']
+			},
+			{
+				label: 'Разрешить отзывы:',
+				type: 'checkbox',
+				id: 'allow-review'
+			},
+			{
+				label: 'Описание сайта:',
+				type: 'textarea',
+				id: 'description-site'
+			},
+			{
+				label: 'Опубликовать',
+				type: 'submit',
+				id: 'submit'
+			}
+		];
+
+		getForm('ourForm', arrForm);
+
+		function getForm(nameForm, arrData) {
+			var form = document.forms[nameForm];
+			//делаем клон имеющейся формы
+			var cloneForm = form.cloneNode();
+			//проходим по предоставленному массиву и добавляем в клонированную форму 
+			// указанные в массиве элементы
+			for (let i = 0; i < arrData.length; i++) {
+				//создаем перенос строки
+				var lineBreak = document.createElement('br');
+				if (arrData[i]['type'] !== 'submit') {
+					//вставляем элемент label в форму для каждого input'а, кроме типа submit
+					cloneForm.appendChild(getFormLabel(arrData[i]));
+				}
+				//в зависимости от указанного типа создаем узлы
+				switch (arrData[i]['type']) {
+					case 'textarea':
+						cloneForm.appendChild(getFormTextarea(arrData[i]));
+						cloneForm.appendChild(lineBreak);
+						break;
+					case 'select':
+						cloneForm.appendChild(getFormSelect(arrData[i]));
+						cloneForm.appendChild(lineBreak);
+						break;
+					case 'radio':
+						//оборачиваем вырианты в radio в блок, чтобы проще потом размещать на странице
+						var divRadio = document.createElement('div');
+						cloneForm.appendChild(divRadio);
+						//вставляем все узлы radio с label в div 
+						for (let j = 0; j < arrData[i]['radioValue'].length; j++) {
+							var labelRadio = divRadio.appendChild(getFormLabelRadio(arrData[i], j));
+							labelRadio.appendChild(getFormRadio(arrData[i], j));
+							var textNodeLabel = document.createTextNode(arrData[i]['radioValue'][j]);
+							labelRadio.appendChild(textNodeLabel);
+							form.appendChild(lineBreak);
+						}
+						break;
+					default:
+						//вставляем все остальные imput'ы 
+						cloneForm.appendChild(getFormInput(arrData[i]));
+						cloneForm.appendChild(lineBreak);
+						break;
+				}
+			}
+
+			//заменяем сущ. форму на клонированную
+			document.body.replaceChild(cloneForm, form);
+
+			//функция создания элемента input кроме submit, radio, textarea
+			function getFormInput(hashData) {
+				var input = document.createElement('input');
+				input.type = hashData['type'];
+				input.id = hashData['id'];
+				return input;
+			}
+			//функция создания элемента label, кроме label для radio
+			function getFormLabel(hashData) {
+				var label = document.createElement('label');
+				label.htmlFor = hashData['id'];
+				label.innerHTML = hashData['label'];
+				return label;
+			}
+			//функция создания элемента textarea
+			function getFormTextarea(hashData) {
+				var textArea = document.createElement('textarea');
+				textArea.type = hashData['type'];
+				textArea.id = hashData['id'];
+				return textArea;
+			}
+			//функция создания элемента input типа Select
+			function getFormSelect(hashData) {
+				var input = document.createElement('select');
+				for (let i = 0; i < hashData['optionValue'].length; i++) {
+					var crOption = document.createElement('option');
+					crOption.innerHTML = hashData['optionValue'][i];
+					input.appendChild(crOption);
+					input.type = hashData['type'];
+					input.id = hashData['id'];
+				}
+				return input;
+			}
+			//функция создания элемента input типа Radio
+			function getFormRadio(hashData, index) {
+				var radio = document.createElement('input');
+				radio.name = hashData['id'];
+				radio.type = hashData['type'];
+				radio.value = hashData['radioValue'][index];
+				radio.id = hashData['id'];
+				return radio;
+			}
+			//функция создания элемента label для radio
+			function getFormLabelRadio(hashData, index) {
+				var label = document.createElement('label');
+				label.htmlFor = hashData['radioValue'][index];
+				label.id = hashData['id'];
+				return label;
+			}
+		}
+	</script>
+</body>
+
+</html>
