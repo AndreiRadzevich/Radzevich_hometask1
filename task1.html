@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>grabDrop </title>
+  <style>
+    img {
+      width: 200px;
+      height: 200px;
+    }
+
+    #img1 {
+      position: absolute;
+      left: 100px;
+      top: 200px;
+
+    }
+
+    #img2 {
+      position: absolute;
+      left: 305px;
+      top: 200px;
+    }
+
+    #img3 {
+      position: absolute;
+      left: 510px;
+      top: 200px;
+    }
+  </style>
+</head>
+
+<body>
+<img id='img1' src="img/racoon-1.jpg">
+<img id='img2' src="img/racoon-2.jpg">
+<img id='img3' src="img/racoon-3.jpg">
+
+<script>
+  var DragImage = null; // какая картинка сейчас перетаскивается
+  var DragShiftX;
+  var DragShiftY;
+
+  dragDrop('img');
+
+  function dragDrop(selector) {
+    var allImage = document.querySelectorAll(selector);
+    [].slice.call(allImage);
+    for (let i = 0; i < allImage.length; i++) {
+      allImage[i].addEventListener('mousedown', Drag_Start);
+    }
+  }
+
+  function Drag_Start(EO) {
+    EO = EO || window.event;
+    DragImage = EO.target;
+    // получим координаты картинки
+    var imgPos = GetElementPos(DragImage);
+    // найдём координаты клика относительно картинки
+    DragShiftX = (EO.pageX - imgPos.left);
+    DragShiftY = (EO.pageY - imgPos.top);
+    DragImage.style.zIndex = 1;
+    DragImage.style.cursor = 'grab';
+    // по-умолчанию тягать элементы в body запрещено, отменяем:
+    EO.preventDefault();
+    DragImage.addEventListener('mousemove', Drag_Move);
+    DragImage.addEventListener('mouseup', Drag_Stop);
+  }
+
+  function Drag_Move(EO) {
+    DragImage.style.left = (EO.pageX - DragShiftX) + 'px';
+    DragImage.style.top = (EO.pageY - DragShiftY) + 'px';
+  }
+
+  function Drag_Stop() {
+    DragImage.removeEventListener('mousemove', Drag_Move);
+    DragImage.style.zIndex = 0;
+    DragImage.style.cursor = 'default';
+    DragImage = null;
+    DragShiftX = null;
+    DragShiftY = null;
+  }
+
+  function GetElementPos(El) {
+    var X = 0;
+    var Y = 0;
+    while (El) {
+      X += El.offsetLeft;
+      Y += El.offsetTop;
+      El = El.offsetParent;
+    }
+    return { left: X, top: Y };
+  }
+
+</script>
+</body>
+</html>
