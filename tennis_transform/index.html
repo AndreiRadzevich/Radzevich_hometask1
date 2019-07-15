@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Tennis</title>
+  <style>
+    .field {
+      border: solid blue 1px;
+      position: relative;
+      width: 400px;
+      height: 300px;
+      box-sizing: border-box;
+    }
+
+    .scoreboard {
+      font-size: 30px;
+      text-align: center;
+    }
+
+    .left {
+      position: absolute;
+      height: 70px;
+      left: 0px;
+      background: red;
+    }
+
+    .right {
+      position: absolute;
+      left: 395px;
+      height: 70px;
+      background: red;
+    }
+
+    .ball {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-radius: 50% 50%;
+      background: green;
+    }
+  </style>
+</head>
+<body>
+<input type='button' value='Пуск!'>
+<div class='scoreboard'>0:0</div>
+<br />
+<div class='container'>
+  <div class="field">
+    <div class="left" style="width: 5px"></div>
+    <div class="right" style="width: 5px"></div>
+    <div class="ball"></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
