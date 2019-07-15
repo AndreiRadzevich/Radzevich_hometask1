@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link href="fonts.css" rel="stylesheet" type="text/css">
+  <link type="text/css" rel="stylesheet" href="style.css">
+
+  <title>Drink</title>
+</head>
+
+<body>
+<div class="wrapper">
+  <div class="column">
+    <button class="btn enter-info-drink">Введите напиток</button>
+    <button class="btn delete-info-drink">Удалить напиток</button>
+  </div>
+  <div class="column">
+    <button class="btn info-drink">О напитке</button>
+    <button class="btn list-drink">Список всех напитков</button>
+  </div>
+
+  <div class="inform-drink"></div>
+  <div class="column">
+    <button class="btn enter-info-eat">Введите блюдо</button>
+    <button class="btn delete-info-eat">Удалить блюдо</button>
+  </div>
+  <div class="column">
+    <button class="btn info-eat">О блюде</button>
+    <button class="btn list-eat">Список всех блюд</button>
+  </div>
+  <div class="inform-eat"></div>
+</div>
+
+<script src="hashStorage.js"></script>
+<script>
+  var drinkStorage = new THashStorage('DRINK');
+  var eatStorage = new THashStorage('EAT');
+  drinkStorage.reset();
+  eatStorage.reset();
+  console.log(eatStorage);
+
+  var addValueEat = document.querySelector('.enter-info-eat');
+  var getValueEat = document.querySelector('.info-eat');
+  var deleteValueEat = document.querySelector('.delete-info-eat');
+  var getKeysEat = document.querySelector('.list-eat');
+  var informEat = document.querySelector('.inform-eat');
+
+  var addValue = document.querySelector('.enter-info-drink');
+  var getValue = document.querySelector('.info-drink');
+  var deleteValue = document.querySelector('.delete-info-drink');
+  var getKeys = document.querySelector('.list-drink');
+  var informDrink = document.querySelector('.inform-drink');
+  //функция для ввода названия напитка
+  function enterTitleDrink() {
+    var title = prompt('Введите название напитка');
+    while (!title || !isNaN(title)) {
+      title = prompt('Введите название напитка правильно');
+    }
+    return title;
+  }
+  //функция для ввода названия еды
+  function enterTitleEat() {
+    var title = prompt('Введите название блюда');
+    while (!title || !isNaN(title)) {
+      title = prompt('Введите название блюда правильно');
+    }
+    return title;
+  }
+  //функция для ввода информации о напитке
+  function enterInfoDrink() {
+    var alcohol = prompt('Является ли напиток алкогольным?');
+    while (!alcohol || !isNaN(alcohol)) {
+      alcohol = prompt("Является ли напиток алкогольным? (Ответьте 'да' или" +
+      " 'нет')");
+    }
+    var recipe = prompt('Напишите рецепт напитка');
+    while (!recipe || !isNaN(recipe)) {
+      recipe = prompt("Напишите рецепт напитка. (например, '1.добавить...'," +
+      " '2.смешать...', '3.пить охлажденным')");
+    }
+    var valueSt = {
+      'Алкогольный:': alcohol,
+      'Рецепт:': recipe
+    };
+    return valueSt;
+  }
+  //функция для ввода информации о еде
+  function enterInfoEat() {
+    var veg = prompt('Является ли блюдо вегетарианским?');
+    while (!veg || !isNaN(veg)) {
+      veg = prompt("Является ли блюдо вегетарианским? (Ответьте 'да' или" +
+      " 'нет')");
+    }
+    var recipe = prompt('Напишите рецепт блюда');
+    while (!recipe || !isNaN(recipe)) {
+      recipe = prompt("Напишите рецепт блюда. (например, '1.добавить...'," +
+      " '2.смешать...', '3.есть охлажденным')");
+    }
+    var valueSt = {
+      'Веганский:': veg,
+      'Рецепт:': recipe
+    };
+    return valueSt;
+  }
+  //при нажатии на кнопку добавляем напиток в хранилище
+  addValue.addEventListener('click', function () {
+    drinkStorage.addValue(enterTitleDrink(), enterInfoDrink());
+  });
+  //при нажатии на кнопку добавляем блюдо в хранилище
+  addValueEat.addEventListener('click', function () {
+    eatStorage.addValue(enterTitleEat(), enterInfoEat());
+  });
+
+  //при нажатии на кнопку выводим информацию о напитке
+  getValue.addEventListener('click', function () {
+    var titleDrink = enterTitleDrink();
+    //информация о напитке в форме объекта
+    var infoDrink = drinkStorage.getValue(titleDrink);
+    //все критерии для описания напитка сохраняем в виде массива
+    if (infoDrink === undefined) {
+      informDrink.innerHTML = "Такого напитка нет в списке";
+    } else {
+      var arrCriterDrink = Object.keys(infoDrink);
+      //все описания напитка сохраняем в виде массива
+      var arrAuxil = [];
+      for (item in infoDrink) {
+        arrAuxil.push(infoDrink[item]);
+      };
+      var str = 'Название: ' + '<i>' + titleDrink + '</i>' + '<br>';
+      for (let i = 0; i < arrCriterDrink.length; i++) {
+        str += arrCriterDrink[i] + ' <i>' + arrAuxil[i] + '</i><br>';
+      }
+      informDrink.innerHTML = str;
+    }
+  });
+  //при нажатии на кнопку выводим информацию о блюде
+  getValueEat.addEventListener('click', function () {
+    var titleEat = enterTitleEat();
+    //информация о блюде в форме объекта
+    var infoEat = eatStorage.getValue(titleEat);
+    //все критерии для описания блюдо сохраняем в виде массива
+    if (infoEat === undefined) {
+      informEat.innerHTML = "Такого блюда нет в списке";
+    } else {
+      var arrCriterEat = Object.keys(infoEat);
+      //все описания блюда сохраняем в виде массива
+      var arrAuxil = [];
+      for (item in infoEat) {
+        arrAuxil.push(infoEat[item]);
+      };
+      var str = 'Название: ' + '<i>' + titleEat + '</i>' + '<br>';
+      for (let i = 0; i < arrCriterEat.length; i++) {
+        str += arrCriterEat[i] + ' <i>' + arrAuxil[i] + '</i><br>';
+      }
+      informEat.innerHTML = str;
+    }
+  });
+
+  //при нажатии на кнопку удаляем информацию о напитке
+  deleteValue.addEventListener('click', function () {
+    var result = drinkStorage.deleteValue(enterTitleDrink());
+    if (result) {
+      informDrink.textContent = 'Напиток удален';
+    } else {
+      informDrink.textContent = 'Такого напитка нет в списке';
+    }
+  });
+  //при нажатии на кнопку удаляем информацию о блюде
+  deleteValueEat.addEventListener('click', function () {
+    var result = eatStorage.deleteValue(enterTitleEat());
+    if (result) {
+      informEat.textContent = 'Блюдо удалено';
+    } else {
+      informEat.textContent = 'Такого блюда нет в списке';
+    }
+  });
+
+  //при нажатии на кнопку выводим все сохраненные названия напитков
+  getKeys.addEventListener('click', function () {
+    informDrink.textContent = 'Перечень всех напитков: ' + drinkStorage.getKeys();
+  });
+  //при нажатии на кнопку выводим все сохраненные названия блюд
+  getKeysEat.addEventListener('click', function () {
+    informEat.textContent = 'Перечень всех блюд: ' + eatStorage.getKeys();
+  });
+</script>
+</body>
